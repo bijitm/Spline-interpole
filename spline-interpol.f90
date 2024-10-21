@@ -1,25 +1,25 @@
       program spine_interpole
       implicit none
       integer, parameter :: mxgrid = 10000, mxcol = 10
-      character(100) :: basename, fileinput, fileoutput, line
-      character(3)   :: extension
-      integer :: nignore, ncolumn, ngrid
+      character(100) :: fbasename, fileinput, fileoutput, line
+      character(3)   :: fextensn
+      integer :: nignore, nycol, ngrid
       integer :: iline, icol
       real*8  :: x(mxgrid), y(mxcol,mxgrid), y2(mxcol,mxgrid)
       real*8  :: xmin, xmax, dx_new, x_new, y_new(mxcol)
 
-      namelist/params/basename,extension,nignore,ncolumn,dx_new
+      namelist/params/fbasename,fextensn,nignore,nycol,dx_new
 
       ! Default values
       nignore = 0
-      ncolumn = 1
+      nycol = 1
       dx_new  = 0.1d0
 
       read(5,params)
       write(*,*)"This is program for spline interpolation"
 
-      fileinput=trim(basename)//'.'//trim(extension)
-      fileoutput=trim(basename)//'_interpolated.'//trim(extension)
+      fileinput=trim(fbasename)//'.'//trim(fextensn)
+      fileoutput=trim(fbasename)//'_interpolated.'//trim(fextensn)
 
       open(1,file=fileinput,status='old')
       open(10,file=fileoutput,status='unknown')
@@ -35,15 +35,17 @@
 
       ngrid=0
       do
-        read(1,*, end=1)x(ngrid+1),y(:ncolumn,ngrid+1)
+        read(1,*, end=1)x(ngrid+1),y(:nycol,ngrid+1)
         ngrid=ngrid+1
       enddo
  1    continue
       close(1)
 
+      if (ngrid>mxgrid) stop "ngrid larger than mxgrid"
+
       write(*,*) "No. of input data points:",ngrid
 
-      do icol=1,ncolumn
+      do icol=1,nycol
         call spline(x(:ngrid),y(icol,:ngrid),ngrid,1.d30,1.d30,y2(icol,:ngrid))
       enddo
 
@@ -52,10 +54,10 @@
 
       x_new=xmin
       do while (x_new<=xmax)
-        do icol=1,ncolumn
+        do icol=1,nycol
           call splint(x(:ngrid),y(icol,:ngrid),y2(icol,:ngrid),ngrid,x_new,y_new(icol))
         enddo
-        write(10,'(g14.4,10es15.6)')x_new, y_new(:ncolumn)
+        write(10,'(g14.4,10es15.6)')x_new, y_new(:nycol)
         x_new = x_new+dx_new
       enddo
       close(10)
