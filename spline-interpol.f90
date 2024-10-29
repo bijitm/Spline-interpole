@@ -24,6 +24,8 @@
       write(*,*)"This is program for spline interpolation"
       write(*,*)
 
+      if (nycol>mxcol) stop "nycol>mxcol. Increase mxcol."
+
       if (dx_new==-9999d0.and.ngrid_new==-9999) &
               stop "Provide either dx_new or ngrid_new"
 
