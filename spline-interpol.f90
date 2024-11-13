@@ -81,9 +81,9 @@
         call spline(x(:ngrid),y(icol,:ngrid),ngrid,1.d30,1.d30,y2(icol,:ngrid))
       enddo
 
-      if (dx_new==-9999d0.and.ngrid_new>1) dx_new = (xfirst-xlast)/dble(ngrid_new-1)
+      if (dx_new==-9999d0.and.ngrid_new>1) dx_new = (xlast-xfirst)/dble(ngrid_new-1)
       if (ngrid_new==1) dx_new=0d0
-      if (ngrid_new==-9999) ngrid_new = int((xfirst-xlast)/dx_new)+1
+      if (ngrid_new==-9999) ngrid_new = int((xlast-xfirst)/dx_new)+1
 
       write(*,*) "No. of new data points:",ngrid_new
 
