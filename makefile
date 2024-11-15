@@ -2,6 +2,6 @@
 main = spline_main.f90
 subroutine = spline.f90
 all = $(subroutine) $(main)
-spline: $(all)
+interpole: $(all)
 	  gfortran $(all) -o interpole
 
