@@ -1,6 +1,6 @@
       program spine_main
       implicit none
-      integer, parameter :: mxgrid = 10000, mxcol = 10
+      integer, parameter :: mxgrid = 10000, mxcol = 20
       character(100) :: fbasename, fileinput, fileoutput, line
       character(3)   :: fextnsion
       integer :: nignore, nycol, ngrid, ngrid_new, igrid
@@ -92,7 +92,7 @@
         do icol=1,nycol
           call splint(x(:ngrid),y(icol,:ngrid),y2(icol,:ngrid),ngrid,x_new,y_new(icol))
         enddo
-        write(10,'(f18.8,10es15.6)')x_new, y_new(:nycol)
+        write(10,'(f18.8,20es15.6)')x_new, y_new(:nycol)
       enddo
       close(10)
 
